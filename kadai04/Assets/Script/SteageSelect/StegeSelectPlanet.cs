@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class SteageSelectPlanet : MonoBehaviour {
+public class StegeSelectPlanet : MonoBehaviour {
 
     public float speed = 360.0f;//ドラッグによる回転速度
     public float friction = 0.1f;//フリック時の減速係数
@@ -31,7 +31,7 @@ public class SteageSelectPlanet : MonoBehaviour {
 
     
     //後で書き直す
-    System.Action onRotateCompete;
+    System.Action onRotateCompete; //定義済みデリゲート
 
     //選択したキャラが正面を向くように回転
     public void RorateOnSelect(Transform enemy, System.Action onRotateCompete)
@@ -46,14 +46,14 @@ public class SteageSelectPlanet : MonoBehaviour {
         if (euler.y > 180)
             euler.y -= 360;
 
-       /* iTween.RotateAdd(gameObject, iTween.Hash(
+        iTween.RotateAdd(gameObject, iTween.Hash(
             "y", euler.y,
             "islocal", true,
             "speed", 60.0f,
-            "oncomplete", "OnRotateComplete",
-            "oncompletetarget", gameObject,
+            "oncomplete", "OnRotateComplete",//"oncomplete","T":アニメーション終了後に関数Tを実行
+            "oncompletetarget", gameObject,//アニメーション終了語に実行する関数が入っているgameObject
             "easetype", iTween.EaseType.easeInOutQuad
-            ));*/
+            ));
     }
 
     //回転終了
