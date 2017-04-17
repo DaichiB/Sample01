@@ -6,6 +6,8 @@ public class StegeSelectManager : MonoBehaviour {
 
     public StegeSelectPlanet planet;
     public StegeSelectBoad boad;
+    public EnemyManeger enemy;
+    public StegeSelectIcon icon;
 
 	// Use this for initialization
 	public void Start () { //本来はopen
@@ -15,12 +17,12 @@ public class StegeSelectManager : MonoBehaviour {
 		
 	}
 	
-	public void OnSelectEnemy()
+	public void OnSelectEnemy(StegeSelectIcon icon)
     {
 
         //planet.RorateOnSelect()
-
-        OnRotateComplete();
+        enemy.Select(icon.enemy);
+        planet.RorateOnSelect(icon.transform, OnRotateComplete);
 
     }
 
@@ -30,5 +32,6 @@ public class StegeSelectManager : MonoBehaviour {
         boad.Open();
 
     }
+
 
 }
