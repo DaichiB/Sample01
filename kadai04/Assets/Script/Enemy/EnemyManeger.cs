@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+[System.Serializable]
 public class EnemyManeger : MonoBehaviour {
 
     public List<EnemyData> enemyDataList; //敵データのリスト

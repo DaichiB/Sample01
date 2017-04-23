@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class EnemyData : MonoBehaviour {
@@ -21,7 +23,7 @@ public class EnemyData : MonoBehaviour {
         
     };
 
-    public string name;
+    public string enemyName;
     public Type type = Type.TallMan;
 
 }

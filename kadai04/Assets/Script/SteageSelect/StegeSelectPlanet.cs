@@ -38,6 +38,7 @@ public class StegeSelectPlanet : MonoBehaviour {
     {
         this.onRotateCompete = onRotateCompete;
         Vector3 from = enemy.position;
+        Debug.Log(from);
         from.y = 0;
         from.Normalize();
         Vector3 to = Vector3.back;

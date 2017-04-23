@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+
 
 public class StegeSelectManager : MonoBehaviour {
 
@@ -20,7 +23,6 @@ public class StegeSelectManager : MonoBehaviour {
 	public void OnSelectEnemy(StegeSelectIcon icon)
     {
 
-        //planet.RorateOnSelect()
         enemy.Select(icon.enemy);
         planet.RorateOnSelect(icon.transform, OnRotateComplete);
 
