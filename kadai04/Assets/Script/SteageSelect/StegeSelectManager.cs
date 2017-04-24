@@ -10,15 +10,29 @@ public class StegeSelectManager : MonoBehaviour {
     public StegeSelectPlanet planet;
     public StegeSelectBoad boad;
     public EnemyManeger enemy;
-    public StegeSelectIcon icon;
+    //public StegeSelectIcon icon;
 
 	// Use this for initialization
 	public void Start () { //本来はopen
 
         this.gameObject.SetActive(true); //設定されているgameObjectを表示状態に
+        InitIcons();
         boad.Close();
 		
 	}
+
+    void InitIcons()
+    {
+
+        StegeSelectIcon[] icons = GetComponentsInChildren<StegeSelectIcon>(true);
+        foreach(StegeSelectIcon icon in icons)
+        {
+
+            icon.Init();
+
+        }
+
+    }
 	
 	public void OnSelectEnemy(StegeSelectIcon icon)
     {
@@ -31,7 +45,7 @@ public class StegeSelectManager : MonoBehaviour {
     public void OnRotateComplete()
     {
 
-        boad.Open();
+        boad.Open(enemy.Selected);
 
     }
 

@@ -9,6 +9,7 @@ public class EnemyManeger : MonoBehaviour {
 
     public List<EnemyData> enemyDataList; //敵データのリスト
 
+    public EnemyData Selected { get { return selected; } }
     EnemyData selected;
 
     public void Select(EnemyData.Type type)

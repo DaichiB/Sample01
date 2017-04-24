@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class EnemyData : MonoBehaviour {
+public class EnemyData {
 
     public enum Type {
 
@@ -25,5 +25,7 @@ public class EnemyData : MonoBehaviour {
 
     public string enemyName;
     public Type type = Type.TallMan;
+    public Color enemyColor = Color.white;
+    public int enemyLV; //1:～Man, 2:～King, 3:ボス
 
 }

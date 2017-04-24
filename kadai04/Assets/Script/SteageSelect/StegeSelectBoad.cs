@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StegeSelectBoad : MonoBehaviour {
+
+    //[SerializeField]
+    public Text enemyName;
+    public Image imageEnemy; //敵のイメージデータ
+    public Image imageCrown;
 
 	public void Close()
     {
@@ -13,10 +19,11 @@ public class StegeSelectBoad : MonoBehaviour {
 
     }
 
-    public void Open()
+    public void Open(EnemyData enemyData)
     {
 
         this.gameObject.SetActive(true);
+        InitEnemyImage(enemyData);
 
     }
 
@@ -24,6 +31,15 @@ public class StegeSelectBoad : MonoBehaviour {
     {
 
         Close();
+
+    }
+
+    void InitEnemyImage(EnemyData enemyData)
+    {
+
+        enemyName.text = enemyData.enemyName;
+        imageEnemy.color = enemyData.enemyColor;
+        imageCrown.gameObject.SetActive(enemyData.enemyLV>1);
 
     }
 
