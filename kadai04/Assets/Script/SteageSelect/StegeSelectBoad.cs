@@ -14,6 +14,8 @@ public class StegeSelectBoad : MonoBehaviour {
     public Image imageCrown;
     public Text enemyHP;
     public Image werknessElement;
+    public Slider Defence;
+    public Slider MagicRes;
 
     [SerializeField]
     private Sprite iconFire;
@@ -72,6 +74,9 @@ public class StegeSelectBoad : MonoBehaviour {
                 break;
 
         }
+
+        Defence.value = enemyData.enemyDefenceValue;
+        MagicRes.value = enemyData.enemyMagicResValue;
 
     }
 
