@@ -11,6 +11,7 @@ public class StegeSelectIcon : MonoBehaviour {
     public EnemyData.Type enemy;
     public Renderer body;
     public GameObject Crown;
+    
 
     public void Init() {
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StegeSelectBoad : MonoBehaviour {
 
@@ -11,8 +12,20 @@ public class StegeSelectBoad : MonoBehaviour {
     public Text enemyName;
     public Image imageEnemy; //敵のイメージデータ
     public Image imageCrown;
+    public Text enemyHP;
+    public Image werknessElement;
 
-	public void Close()
+    [SerializeField]
+    private Sprite iconFire;
+    [SerializeField]
+    private Sprite iconIce;
+    [SerializeField]
+    private Sprite iconThunder;
+
+
+    //public EnemyManeger enemyScript;
+
+    public void Close()
     {
 
         this.gameObject.SetActive(false);// 設定されているgameObjectを非表示に
@@ -40,6 +53,33 @@ public class StegeSelectBoad : MonoBehaviour {
         enemyName.text = enemyData.enemyName;
         imageEnemy.color = enemyData.enemyColor;
         imageCrown.gameObject.SetActive(enemyData.enemyLV>1);
+        enemyHP.text = "HP: " + enemyData.enemyHP;
+
+        switch(enemyData.Werkness){
+
+            case EnemyData.Element.Fire:
+                werknessElement.sprite = iconFire;
+                break;
+
+            case EnemyData.Element.Ice:
+                werknessElement.sprite = iconIce;
+                break;
+            case EnemyData.Element.Thunder:
+                werknessElement.sprite = iconThunder;
+                break;
+            case EnemyData.Element.None:
+                werknessElement.gameObject.SetActive(false);
+                break;
+
+        }
+
+    }
+
+    public void OnBattleButton()
+    {
+
+        SceneManager.LoadScene("Battle");
+        //BattleManrger.Init(enemyScript.Selected);
 
     }
 

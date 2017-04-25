@@ -45,7 +45,7 @@ public class StegeSelectManager : MonoBehaviour {
     public void OnRotateComplete()
     {
 
-        boad.Open(enemy.Selected);
+        boad.Open(EnemyManeger.Selected);
 
     }
 

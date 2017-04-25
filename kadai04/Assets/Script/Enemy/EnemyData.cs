@@ -23,9 +23,22 @@ public class EnemyData {
         
     };
 
+    public enum Element {
+
+        Fire,
+        Ice,
+        Thunder,
+        None
+
+    };
+
     public string enemyName;
     public Type type = Type.TallMan;
     public Color enemyColor = Color.white;
     public int enemyLV; //1:～Man, 2:～King, 3:ボス
+    public int enemyHP;
+    public int enemyDefenceValue;
+    public int enemyMagicResValue;
+    public Element Werkness;
 
 }
