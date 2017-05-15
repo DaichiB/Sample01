@@ -20,10 +20,27 @@ public class BattleManrger : MonoBehaviour {
     [SerializeField]
     private Sprite iconThunder;
 
+    [SerializeField]
+    GameObject ruletteTable, buttonStart, buttonStop;
+
+    [SerializeField]
+    Image finish;
+
+    bool onRuletteTurn;
+
+    int enemyDamage;
+
+    EnemyData enemy;
+
     // Use this for initialization
     void Start () {
 
         this.gameObject.SetActive(true);
+        onRuletteTurn = false;
+        buttonStart.SetActive(true);
+        buttonStop.SetActive(false);
+        enemyDamage = 0;
+        finish.gameObject.SetActive(false);
         Init(EnemyManeger.Selected);
 
 		
@@ -31,9 +48,11 @@ public class BattleManrger : MonoBehaviour {
 
     public void Init(EnemyData enemyData) {
 
+        enemy = enemyData;
         body.material.color = enemyData.enemyColor;
         Crown.gameObject.SetActive(enemyData.enemyLV > 1);
-        enemyHP.text = enemyData.enemyHP+ "/ " + enemyData.enemyHP;
+
+        enemyHP.text = (enemyData.enemyHP-0)+ "/ " + enemyData.enemyHP;
 
         switch (enemyData.Werkness)
         {
@@ -63,6 +82,50 @@ public class BattleManrger : MonoBehaviour {
     {
 
         SceneManager.LoadScene("SelectBattleGame");
+
+    }
+
+    public void OnClickStart()
+    {
+
+        onRuletteTurn = true;
+        buttonStart.SetActive(false);
+        buttonStop.SetActive(true);
+
+    }
+    public void OnClickStop()
+    {
+
+        onRuletteTurn = false;
+        buttonStart.SetActive(true);
+        buttonStop.SetActive(false);
+        UpdataEnemyHp();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (onRuletteTurn == true)
+        {
+
+            ruletteTable.transform.Rotate(0, 0, 5f, Space.World);
+
+        }
+
+    }
+
+    void UpdataEnemyHp()
+    {
+
+        enemyDamage =enemyDamage+ 50;
+        if (enemyDamage >= enemy.enemyHP) {
+            enemyDamage = enemy.enemyHP;
+            finish.gameObject.SetActive(true);
+        }
+        
+        enemyHP.text = (enemy.enemyHP - enemyDamage) + "/ " + enemy.enemyHP;
 
     }
 
