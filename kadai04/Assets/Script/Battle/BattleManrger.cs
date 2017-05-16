@@ -24,7 +24,7 @@ public class BattleManrger : MonoBehaviour {
     GameObject ruletteTable, buttonStart, buttonStop;
 
     [SerializeField]
-    Image finish;
+    Image message;
 
     bool onRuletteTurn;
 
@@ -32,19 +32,70 @@ public class BattleManrger : MonoBehaviour {
 
     EnemyData enemy;
 
+    [SerializeField]
+    Sprite[] messageSprites;
+
     // Use this for initialization
+
+        enum MessageType
+    {
+        BattleStart,
+        Win,
+        Lose
+    }
+
     void Start () {
 
         this.gameObject.SetActive(true);
         onRuletteTurn = false;
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
+        message.gameObject.SetActive(false);
         enemyDamage = 0;
-        finish.gameObject.SetActive(false);
         Init(EnemyManeger.Selected);
-
+        StartCoroutine(AppearMesseage((MessageType)0));
 		
 	}
+
+    IEnumerator AppearMesseage(MessageType type)
+    {
+        
+        if(type== MessageType.BattleStart)
+        {
+            message.sprite = messageSprites[0];
+
+            yield return new WaitForSeconds(0.2f);
+
+            message.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(2f);
+
+            Debug.Log("Waited!");
+
+            message.gameObject.SetActive(false);
+        
+        }else
+        if (type == MessageType.Win)
+        {
+
+            message.sprite = messageSprites[1];
+            message.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(5f);
+
+            SceneManager.LoadScene("SelectBattleGame");
+
+
+        }
+        else
+        if(type == MessageType.Lose)
+        {
+
+
+
+        }
+
+    }
 
     public void Init(EnemyData enemyData) {
 
@@ -99,7 +150,9 @@ public class BattleManrger : MonoBehaviour {
         onRuletteTurn = false;
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
-        UpdataEnemyHp();
+        
+        if (tryAttack())
+            UpdataEnemyHp();
 
     }
 
@@ -122,10 +175,28 @@ public class BattleManrger : MonoBehaviour {
         enemyDamage =enemyDamage+ 50;
         if (enemyDamage >= enemy.enemyHP) {
             enemyDamage = enemy.enemyHP;
-            finish.gameObject.SetActive(true);
+            StartCoroutine(AppearMesseage((MessageType)1));
         }
         
         enemyHP.text = (enemy.enemyHP - enemyDamage) + "/ " + enemy.enemyHP;
+
+    }
+
+    bool tryAttack()
+    {
+
+        RectTransform temp = ruletteTable.GetComponent<RectTransform>();
+        Vector3 nowRotation = temp.transform.localRotation.eulerAngles;
+
+        if (nowRotation.z >= 0 && nowRotation.z <= 60) return true;
+        if (nowRotation.z >= 80 && nowRotation.z <= 100) return true;
+        if (nowRotation.z >= 120 && nowRotation.z <= 160) return true;
+        if (nowRotation.z >= 180 && nowRotation.z <= 220) return true;
+        if (nowRotation.z >= 240 && nowRotation.z <= 280) return true;
+        if (nowRotation.z >= 300 && nowRotation.z <= 340) return true;
+
+        return false;
+
 
     }
 
