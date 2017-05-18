@@ -10,6 +10,11 @@ public class BattlePlayerItem : MonoBehaviour {
     Image[] playerLife;
     [SerializeField]
     Sprite[] LifeIcon;
+    [SerializeField]
+    Slider AttackGarge, MagicGarge;
+
+    public int ValueAttack { get { return (int)AttackGarge.value *10; } }
+    public int ValueMagic { get { return (int)MagicGarge.value *10; } }
 
     public void Init()
     {
@@ -18,9 +23,12 @@ public class BattlePlayerItem : MonoBehaviour {
         for(int i = 0; i < 3; i++)
             playerLife[i].sprite = LifeIcon[0];
 
+        AttackGarge.value = 3;
+        MagicGarge.value = 4;
+
     }
 
-    public bool MissAttac()
+    public bool MissAttack()
     {
 
         playerLife[playerDamage].sprite = LifeIcon[1];
@@ -28,6 +36,20 @@ public class BattlePlayerItem : MonoBehaviour {
         if (playerDamage == 3) return false;
         else return true;
 
+    }
+
+    public void HitCharge()
+    {
+
+        AttackGarge.value = AttackGarge.value * 2;
+        MagicGarge.value = MagicGarge.value * 2;
+
+    }
+
+    public void ReturnAttackAndMagicValue()
+    {
+        AttackGarge.value = 3;
+        MagicGarge.value = 4;
     }
 
 }

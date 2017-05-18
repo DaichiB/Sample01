@@ -84,6 +84,7 @@
     <Compile Include="Assets\Script\Battle\BattleEnemyItem.cs" />
     <Compile Include="Assets\Script\Battle\BattleManrger.cs" />
     <Compile Include="Assets\Script\Battle\BattlePlayerItem.cs" />
+    <Compile Include="Assets\Script\DataEnum\DataEnum.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyData.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyManeger.cs" />
     <Compile Include="Assets\Script\SteageSelect\StegeSelectBoad.cs" />

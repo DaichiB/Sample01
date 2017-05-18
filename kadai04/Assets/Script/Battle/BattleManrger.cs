@@ -30,12 +30,7 @@ public class BattleManrger : MonoBehaviour {
 
     // Use this for initialization
 
-        enum MessageType
-    {
-        BattleStart,
-        Win,
-        Lose
-    }
+        
 
     void Start () {
 
@@ -56,7 +51,7 @@ public class BattleManrger : MonoBehaviour {
     IEnumerator AppearMesseage(MessageType type)
     {
         
-        if(type== MessageType.BattleStart)
+        if(type== MessageType.battleStart)
         {
             message.sprite = messageSprites[0];
 
@@ -71,7 +66,7 @@ public class BattleManrger : MonoBehaviour {
             message.gameObject.SetActive(false);
         
         }else
-        if (type == MessageType.Win)
+        if (type == MessageType.win)
         {
 
             message.sprite = messageSprites[1];
@@ -84,7 +79,7 @@ public class BattleManrger : MonoBehaviour {
 
         }
         else
-        if(type == MessageType.Lose)
+        if(type == MessageType.lose)
         {
 
             message.sprite = messageSprites[2];
@@ -129,9 +124,30 @@ public class BattleManrger : MonoBehaviour {
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
 
-        if (TryAttack()) enemyArive = enemyItem.UpdataEnemyHp(50);
-        else playerArive = playerItem.MissAttac();
+        AttackType result = TryAttack();
+        int damage = 0;
 
+        if (result != AttackType.miss)
+        {
+
+            if (result == AttackType.charge) playerItem.HitCharge();
+            else
+            {
+                if (result == AttackType.normal) damage = playerItem.ValueAttack;
+                else if (result == AttackType.critical) damage = playerItem.ValueAttack * 2;
+                else
+                {
+                    if (result == enemy.Werkness) damage = playerItem.ValueMagic * 2;
+                    else damage = playerItem.ValueMagic;
+                }
+
+                enemyArive = enemyItem.UpdataEnemyHp(damage);
+                playerItem.ReturnAttackAndMagicValue();
+            }
+        }
+        else playerArive = playerItem.MissAttack();
+
+        Debug.LogFormat("Attack:{0}, damage:{1}", result.ToString(), damage);
         if (enemyArive == false) StartCoroutine(AppearMesseage((MessageType)1));
         if (playerArive == false) StartCoroutine(AppearMesseage((MessageType)2));
 
@@ -150,20 +166,20 @@ public class BattleManrger : MonoBehaviour {
 
     }
 
-    bool TryAttack()
+    AttackType TryAttack()
     {
 
         RectTransform temp = ruletteTable.GetComponent<RectTransform>();
         Vector3 nowRotation = temp.transform.localRotation.eulerAngles;
 
-        if (nowRotation.z >= 0 && nowRotation.z <= 60) return true;
-        if (nowRotation.z >= 80 && nowRotation.z <= 100) return true;
-        if (nowRotation.z >= 120 && nowRotation.z <= 160) return true;
-        if (nowRotation.z >= 180 && nowRotation.z <= 220) return true;
-        if (nowRotation.z >= 240 && nowRotation.z <= 280) return true;
-        if (nowRotation.z >= 300 && nowRotation.z <= 340) return true;
+        if (nowRotation.z >= 0 && nowRotation.z <= 60) return AttackType.normal;
+        if (nowRotation.z >= 80 && nowRotation.z <= 100) return AttackType.critical;
+        if (nowRotation.z >= 120 && nowRotation.z <= 160) return AttackType.fire;
+        if (nowRotation.z >= 180 && nowRotation.z <= 220) return AttackType.ice;
+        if (nowRotation.z >= 240 && nowRotation.z <= 280) return AttackType.thunder;
+        if (nowRotation.z >= 300 && nowRotation.z <= 340) return AttackType.charge;
 
-        return false;
+        return AttackType.miss;
 
 
     }

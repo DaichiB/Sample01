@@ -59,17 +59,17 @@ public class StegeSelectBoad : MonoBehaviour {
 
         switch(enemyData.Werkness){
 
-            case EnemyData.Element.Fire:
+            case AttackType.fire:
                 werknessElement.sprite = iconFire;
                 break;
 
-            case EnemyData.Element.Ice:
+            case AttackType.ice:
                 werknessElement.sprite = iconIce;
                 break;
-            case EnemyData.Element.Thunder:
+            case AttackType.thunder:
                 werknessElement.sprite = iconThunder;
                 break;
-            case EnemyData.Element.None:
+            case AttackType.normal:
                 werknessElement.gameObject.SetActive(false);
                 break;
 

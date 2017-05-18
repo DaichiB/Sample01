@@ -28,17 +28,17 @@ public class BattleEnemyItem : MonoBehaviour {
         switch (enemyData.Werkness)
         {
 
-            case EnemyData.Element.Fire:
+            case AttackType.fire:
                 werknessElement.sprite = elementIcon[0];
                 break;
 
-            case EnemyData.Element.Ice:
+            case AttackType.ice:
                 werknessElement.sprite = elementIcon[1];
                 break;
-            case EnemyData.Element.Thunder:
+            case AttackType.thunder:
                 werknessElement.sprite = elementIcon[2];
                 break;
-            case EnemyData.Element.None:
+            case AttackType.normal:
                 werknessElement.gameObject.SetActive(false);
                 break;
 
