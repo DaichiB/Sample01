@@ -22,6 +22,11 @@ public class StegeSelectIcon : MonoBehaviour
         this.gameObject.GetComponent<Animator>().SetBool("IsAlive", data.IsAlive);
     }
 
+    public void ActionEnemyDead()
+    {
+        this.gameObject.GetComponent<Animator>().SetBool("IsAlive", false);
+    }
+
 
 }
 

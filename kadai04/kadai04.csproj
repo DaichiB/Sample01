@@ -87,6 +87,7 @@
     <Compile Include="Assets\Script\DataEnum\DataEnum.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyData.cs" />
     <Compile Include="Assets\Script\Enemy\EnemyManeger.cs" />
+    <Compile Include="Assets\Script\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\Script\SteageSelect\StegeSelectBoad.cs" />
     <Compile Include="Assets\Script\SteageSelect\StegeSelectIcon.cs" />
     <Compile Include="Assets\Script\SteageSelect\StegeSelectManager.cs" />

@@ -14,6 +14,8 @@ public class BattleManrger : MonoBehaviour
     BattleEnemyItem enemyItem;
     [SerializeField]
     BattlePlayerItem playerItem;
+    [SerializeField]
+    StegeSelectIcon selectIcon;
 
     [SerializeField]
     GameObject ruletteTable, buttonStart, buttonStop;
@@ -61,6 +63,7 @@ public class BattleManrger : MonoBehaviour
         playerArive = true;
         state = BattleState.none;
         Init();
+        Debug.Log(enemy.IsAlive);
         StartCoroutine(AppearMesseage((MessageType)0));
 
     }
@@ -225,6 +228,7 @@ public class BattleManrger : MonoBehaviour
         {
 
             EnemyManeger.Instance.CrearEnemy(enemy.type);
+            selectIcon.ActionEnemyDead();
             StartCoroutine(AppearMesseage((MessageType)1));
 
         }
