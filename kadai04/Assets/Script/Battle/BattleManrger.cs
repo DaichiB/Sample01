@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class BattleManrger : MonoBehaviour {
+public class BattleManrger : MonoBehaviour
+{
 
     public Renderer body;
     public GameObject Crown;
@@ -13,11 +14,9 @@ public class BattleManrger : MonoBehaviour {
     BattleEnemyItem enemyItem;
     [SerializeField]
     BattlePlayerItem playerItem;
-    
+
     [SerializeField]
     GameObject ruletteTable, buttonStart, buttonStop;
-
-    protected bool onRuletteTurn;
 
     protected int enemyDamage;
     EnemyData enemy;
@@ -27,16 +26,32 @@ public class BattleManrger : MonoBehaviour {
     [SerializeField]
     Sprite[] messageSprites;
     protected bool enemyArive, playerArive;
-    
+
+    bool isStopClick = false;
+    float speadRoulette = 0;
+    public float MAX_SPEAD = 360f;
+
 
     // Use this for initialization
 
-        
+    enum BattleState
+    {
+        none,
+        messeage,//メッセージ表示
+        idle,//待機状態
+        turn,//ルーレット回転
+        stopping//ルーレット減速
+    }
 
-    void Start () {
+    BattleState state = BattleState.none;
+
+
+
+
+    void Start()
+    {
 
         this.gameObject.SetActive(true);
-        onRuletteTurn = false;
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
         message.gameObject.SetActive(false);
@@ -44,15 +59,17 @@ public class BattleManrger : MonoBehaviour {
         enemy = EnemyManeger.Selected;
         enemyArive = true;
         playerArive = true;
+        state = BattleState.none;
         Init();
         StartCoroutine(AppearMesseage((MessageType)0));
-		
-	}
+
+    }
 
     IEnumerator AppearMesseage(MessageType type)
     {
-        
-        if(type== MessageType.battleStart)
+
+        state = BattleState.messeage;
+        if (type == MessageType.battleStart)
         {
             message.sprite = messageSprites[0];
 
@@ -65,8 +82,9 @@ public class BattleManrger : MonoBehaviour {
             Debug.Log("Waited!");
 
             message.gameObject.SetActive(false);
-        
-        }else
+
+        }
+        else
         if (type == MessageType.win)
         {
 
@@ -80,7 +98,7 @@ public class BattleManrger : MonoBehaviour {
 
         }
         else
-        if(type == MessageType.lose)
+        if (type == MessageType.lose)
         {
 
             message.sprite = messageSprites[2];
@@ -91,10 +109,12 @@ public class BattleManrger : MonoBehaviour {
             SceneManager.LoadScene("SelectBattleGame");
 
         }
+        state = BattleState.idle;
 
     }
 
-    public void Init() {
+    public void Init()
+    {
 
         body.material.color = enemy.enemyColor;
         Crown.gameObject.SetActive(enemy.enemyLV > 1);
@@ -112,8 +132,9 @@ public class BattleManrger : MonoBehaviour {
 
     public void OnClickStart()
     {
+        if (state != BattleState.idle) return;
 
-        onRuletteTurn = true;
+        state = BattleState.turn;
         buttonStart.SetActive(false);
         buttonStop.SetActive(true);
 
@@ -121,10 +142,50 @@ public class BattleManrger : MonoBehaviour {
     public void OnClickStop()
     {
 
-        onRuletteTurn = false;
+        if (state != BattleState.turn)
+        {
+            Debug.LogError("Error:Click Stop when state is not turn!");
+            return;
+        }
+
+        state = BattleState.stopping;
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (state == BattleState.turn || state == BattleState.stopping)
+        {
+            switch (state)
+            {
+                case BattleState.turn:
+                    if (speadRoulette < MAX_SPEAD)
+                        speadRoulette += 5f;
+                    break;
+                case BattleState.stopping:
+                    speadRoulette -= 5f;
+                    break;
+            }
+
+
+
+            ruletteTable.transform.Rotate(0, 0, speadRoulette * Time.deltaTime, Space.World);
+
+            if (speadRoulette <= 0)
+            {
+                state = BattleState.idle;
+                UpdateStatus();
+            }
+        }
+
+    }
+
+    void UpdateStatus()
+    {
         AttackType result = TryAttack();
         int damage = 0;
         AttackKind kind;
@@ -153,7 +214,7 @@ public class BattleManrger : MonoBehaviour {
                     kind = AttackKind.magic;
                 }
 
-                enemyArive = enemyItem.UpdataEnemyHp(damage,kind);
+                enemyArive = enemyItem.UpdataEnemyHp(damage, kind);
                 playerItem.ReturnAttackAndMagicValue();
             }
         }
@@ -162,26 +223,12 @@ public class BattleManrger : MonoBehaviour {
         Debug.LogFormat("Attack:{0}, damage:{1}", result.ToString(), damage);
         if (enemyArive == false)
         {
-          
+
             EnemyManeger.Instance.CrearEnemy(enemy.type);
             StartCoroutine(AppearMesseage((MessageType)1));
 
         }
         if (playerArive == false) StartCoroutine(AppearMesseage((MessageType)2));
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (onRuletteTurn == true)
-        {
-
-            ruletteTable.transform.Rotate(0, 0, 5f, Space.World);
-
-        }
-
     }
 
     AttackType TryAttack()

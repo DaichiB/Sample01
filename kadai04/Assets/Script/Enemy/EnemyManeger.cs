@@ -11,6 +11,9 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
 
     public static EnemyData Selected { get { return selected; } }
     public static EnemyData selected;
+    int enemyCrearCount = 0;
+    public int StegeLv{get{ return stegeLv; } }
+    int stegeLv = 1;
 
     
     public void Awake()
@@ -20,8 +23,8 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
             Destroy(this);
             return;
         }
-            DontDestroyOnLoad(this.gameObject);
-            
+        DontDestroyOnLoad(this.gameObject);
+        stegeLv = 1;
     }
     
     public void Select(EnemyData.Type type)
@@ -41,17 +44,18 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
     public void CrearEnemy(EnemyData.Type type)
     {
 
-        /*
+        
         EnemyData enemy = FindData(type);
-        enemy.IsAlive = false;
-        */
-
-        foreach(EnemyData enemy in enemyDataList)
-        {
-            if (enemy.type == type) enemy.EnemyDaed();
-        }
+        enemy.EnemyDaed();
+        
+        enemyCrearCount++;
+        if (stegeLv == 1 && enemyCrearCount >= 4)
+            stegeLv = 2;
+        else if (stegeLv == 2 && enemyCrearCount >= 8)
+            stegeLv = 3;
 
 
     }
+
 
 }
