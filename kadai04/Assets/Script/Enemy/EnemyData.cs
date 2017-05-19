@@ -31,5 +31,14 @@ public class EnemyData {
     public int enemyDefenceValue;
     public int enemyMagicResValue;
     public AttackType Werkness;
+    public bool IsAlive {
+        get { return isAlive; }
+    }
+    bool isAlive = true;
+
+    public void EnemyDaed()
+    {
+        isAlive = false;
+    }
 
 }

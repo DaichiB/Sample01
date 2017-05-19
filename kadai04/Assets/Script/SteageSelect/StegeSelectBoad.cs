@@ -24,9 +24,6 @@ public class StegeSelectBoad : MonoBehaviour {
     [SerializeField]
     private Sprite iconThunder;
 
-
-    //public EnemyManeger enemyScript;
-
     public void Close()
     {
 

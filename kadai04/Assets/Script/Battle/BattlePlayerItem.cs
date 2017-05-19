@@ -16,15 +16,17 @@ public class BattlePlayerItem : MonoBehaviour {
     public int ValueAttack { get { return (int)AttackGarge.value *10; } }
     public int ValueMagic { get { return (int)MagicGarge.value *10; } }
 
+    public int attack = 4, magic = 5;
+
     public void Init()
     {
 
         playerDamage = 0;
         for(int i = 0; i < 3; i++)
             playerLife[i].sprite = LifeIcon[0];
-
-        AttackGarge.value = 3;
-        MagicGarge.value = 4;
+       
+        AttackGarge.value = attack;
+        MagicGarge.value = magic;
 
     }
 
@@ -48,8 +50,8 @@ public class BattlePlayerItem : MonoBehaviour {
 
     public void ReturnAttackAndMagicValue()
     {
-        AttackGarge.value = 3;
-        MagicGarge.value = 4;
+        AttackGarge.value = attack;
+        MagicGarge.value = magic;
     }
 
 }

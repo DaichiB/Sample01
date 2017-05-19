@@ -13,7 +13,7 @@ public class BattleManrger : MonoBehaviour {
     BattleEnemyItem enemyItem;
     [SerializeField]
     BattlePlayerItem playerItem;
-
+    
     [SerializeField]
     GameObject ruletteTable, buttonStart, buttonStop;
 
@@ -27,6 +27,7 @@ public class BattleManrger : MonoBehaviour {
     [SerializeField]
     Sprite[] messageSprites;
     protected bool enemyArive, playerArive;
+    
 
     // Use this for initialization
 
@@ -97,7 +98,7 @@ public class BattleManrger : MonoBehaviour {
 
         body.material.color = enemy.enemyColor;
         Crown.gameObject.SetActive(enemy.enemyLV > 1);
-
+        playerItem.Init();
         enemyItem.SetEnemyData(enemy);
 
     }
@@ -126,6 +127,7 @@ public class BattleManrger : MonoBehaviour {
 
         AttackType result = TryAttack();
         int damage = 0;
+        AttackKind kind;
 
         if (result != AttackType.miss)
         {
@@ -133,22 +135,38 @@ public class BattleManrger : MonoBehaviour {
             if (result == AttackType.charge) playerItem.HitCharge();
             else
             {
-                if (result == AttackType.normal) damage = playerItem.ValueAttack;
-                else if (result == AttackType.critical) damage = playerItem.ValueAttack * 2;
+                if (result == AttackType.normal)
+                {
+                    damage = playerItem.ValueAttack;
+                    kind = AttackKind.attack;
+                }
+                else if (result == AttackType.critical)
+                {
+                    damage = playerItem.ValueAttack * 2;
+                    kind = AttackKind.attack;
+                }
                 else
                 {
                     if (result == enemy.Werkness) damage = playerItem.ValueMagic * 2;
                     else damage = playerItem.ValueMagic;
+
+                    kind = AttackKind.magic;
                 }
 
-                enemyArive = enemyItem.UpdataEnemyHp(damage);
+                enemyArive = enemyItem.UpdataEnemyHp(damage,kind);
                 playerItem.ReturnAttackAndMagicValue();
             }
         }
         else playerArive = playerItem.MissAttack();
 
         Debug.LogFormat("Attack:{0}, damage:{1}", result.ToString(), damage);
-        if (enemyArive == false) StartCoroutine(AppearMesseage((MessageType)1));
+        if (enemyArive == false)
+        {
+          
+            EnemyManeger.Instance.CrearEnemy(enemy.type);
+            StartCoroutine(AppearMesseage((MessageType)1));
+
+        }
         if (playerArive == false) StartCoroutine(AppearMesseage((MessageType)2));
 
     }

@@ -21,3 +21,9 @@ public enum AttackType
     miss
 
 };
+
+public enum AttackKind
+{
+    attack,
+    magic
+};

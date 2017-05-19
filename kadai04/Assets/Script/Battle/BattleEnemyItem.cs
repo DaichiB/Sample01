@@ -17,7 +17,7 @@ public class BattleEnemyItem : MonoBehaviour {
 
     const string ENEMY_HP = "{0} / {1}";
 
-    protected int enemyDamage, enemyMaxHP;
+    int enemyDamage, enemyMaxHP;
 
     public void SetEnemyData(EnemyData enemyData)
     {
@@ -51,20 +51,25 @@ public class BattleEnemyItem : MonoBehaviour {
 
     }
 
-    public bool UpdataEnemyHp(int Damage)
+    public bool UpdataEnemyHp(int Damage, AttackKind kind)
     {
+        int defence=0;
+        if (kind == AttackKind.attack) defence = (int)Defence.value*10;
+        else if (kind == AttackKind.magic) defence = (int)MagicRes.value*10;
 
-        enemyDamage += Damage;
+        if (Damage > defence)
+            enemyDamage = enemyDamage + Damage-defence;
+        
         if (enemyDamage >= enemyMaxHP)
         {
             enemyDamage = enemyMaxHP;
-            enemyHP.text = string.Format(ENEMY_HP, enemyMaxHP - enemyDamage, enemyMaxHP);
-            lifeGarge.value -= Damage;
+            enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
+            lifeGarge.value = enemyMaxHP - enemyDamage;
             return false;
         }
 
-        enemyHP.text = string.Format(ENEMY_HP, enemyMaxHP - enemyDamage, enemyMaxHP);
-        lifeGarge.value -= Damage;
+        enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
+        lifeGarge.value = enemyMaxHP - enemyDamage;
         return true;
 
     }
