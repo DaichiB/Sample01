@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class Achivement : MonoBehaviour {
+public class Achievement : MonoBehaviour {
 
     [SerializeField]
     Transform parent;
@@ -24,8 +24,9 @@ public class Achivement : MonoBehaviour {
     {
         for (int i = 0; i < count; i++)
         {
-            GameObject Achie = (GameObject)Instantiate(prefab, parent);
-            AnimationAchievement(Achie);
+            AchievementItem Achie = GameObject.Instantiate(prefab, parent).GetComponent<AchievementItem>();
+            Achie.Init(i);
+            AnimationAchievement(Achie.gameObject);
             yield return new WaitForSeconds(0.1f);
         }
     }

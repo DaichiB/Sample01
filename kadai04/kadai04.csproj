@@ -81,7 +81,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\Achievement\Achivement.cs" />
+    <Compile Include="Assets\Script\Achievement\Achievement.cs" />
+    <Compile Include="Assets\Script\Achievement\AchievementItem.cs" />
+    <Compile Include="Assets\Script\Achievement\AchievementManeger.cs" />
     <Compile Include="Assets\Script\Battle\BattleEnemyItem.cs" />
     <Compile Include="Assets\Script\Battle\BattleManrger.cs" />
     <Compile Include="Assets\Script\Battle\BattlePlayerItem.cs" />

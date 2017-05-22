@@ -27,3 +27,22 @@ public enum AttackKind
     attack,
     magic
 };
+
+public enum AchievementKind
+{
+    firstBattle,
+    crearTallMan,
+    crearFireMan,
+    crearIceMan,
+    crearClayMan,
+    crearTallKing,
+    crearFireKing,
+    crearIceKing,
+    crearClayKing,
+    crearDarkKing,
+    loseBattle,
+    missAttack,
+    hitCritical,
+    hitWeakness,
+    complete
+}
