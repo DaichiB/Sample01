@@ -25,6 +25,7 @@ public class Achivement : MonoBehaviour {
         for (int i = 0; i < count; i++)
         {
             GameObject Achie = (GameObject)Instantiate(prefab, parent);
+            AnimationAchievement(Achie);
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -32,6 +33,17 @@ public class Achivement : MonoBehaviour {
     public void OnClickReturn()
     {
         SceneManager.LoadScene("SelectBattleGame");
+    }
+
+    public void AnimationAchievement(GameObject achie)
+    {
+        iTween.RotateFrom(achie, iTween.Hash(
+            "z", 60.0f,
+            "isLocal", true,
+            "time", 2.0f,
+            "easetype", iTween.EaseType.easeOutElastic
+            ));
+           
     }
 	
 }
