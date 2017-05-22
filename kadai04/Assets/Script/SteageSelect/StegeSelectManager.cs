@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class StegeSelectManager : MonoBehaviour {
@@ -45,6 +46,11 @@ public class StegeSelectManager : MonoBehaviour {
 
         boad.Open(EnemyManeger.Selected);
 
+    }
+
+    public void OnClickAchivement()
+    {
+        SceneManager.LoadScene("Achievement");
     }
 
 

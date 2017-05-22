@@ -47,7 +47,10 @@ public class BattleManrger : MonoBehaviour
 
     BattleState state = BattleState.none;
 
-
+    [SerializeField]
+    Transform parent;
+    [SerializeField]
+    GameObject[] effectPrefab;
 
 
     void Start()
@@ -217,6 +220,7 @@ public class BattleManrger : MonoBehaviour
                     kind = AttackKind.magic;
                 }
 
+                AttackEffect(result);
                 enemyArive = enemyItem.UpdataEnemyHp(damage, kind);
                 playerItem.ReturnAttackAndMagicValue();
             }
@@ -250,6 +254,21 @@ public class BattleManrger : MonoBehaviour
 
         return AttackType.miss;
 
+
+    }
+
+    void AttackEffect(AttackType type)
+    {
+
+        if ((int)type > 4)
+        {
+            Debug.LogError( "Error Attack Type");
+            return;
+        }
+        Vector3 pos = new Vector3(0, 0.02f, -0.05f);
+        Quaternion rot = new Quaternion(0, 0, 0, 0);
+        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, parent);
+        GameObject.Destroy(eff, 2.0f);
 
     }
 
