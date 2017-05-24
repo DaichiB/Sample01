@@ -18,11 +18,8 @@ public class StegeSelectBoad : MonoBehaviour {
     public Slider MagicRes;
 
     [SerializeField]
-    private Sprite iconFire;
-    [SerializeField]
-    private Sprite iconIce;
-    [SerializeField]
-    private Sprite iconThunder;
+    private List<Sprite> iconWeakness;
+    
 
     public void Close()
     {
@@ -53,24 +50,7 @@ public class StegeSelectBoad : MonoBehaviour {
         imageEnemy.color = enemyData.enemyColor;
         imageCrown.gameObject.SetActive(enemyData.enemyLV>1);
         enemyHP.text = "HP: " + enemyData.enemyHP;
-
-        switch(enemyData.Werkness){
-
-            case AttackType.fire:
-                werknessElement.sprite = iconFire;
-                break;
-
-            case AttackType.ice:
-                werknessElement.sprite = iconIce;
-                break;
-            case AttackType.thunder:
-                werknessElement.sprite = iconThunder;
-                break;
-            case AttackType.normal:
-                werknessElement.gameObject.SetActive(false);
-                break;
-
-        }
+        werknessElement.sprite = iconWeakness[(int)enemyData.Werkness];
 
         Defence.value = enemyData.enemyDefenceValue;
         MagicRes.value = enemyData.enemyMagicResValue;
@@ -81,7 +61,6 @@ public class StegeSelectBoad : MonoBehaviour {
     {
 
         SceneManager.LoadScene("Battle");
-        //BattleManrger.Init(enemyScript.Selected);
 
     }
 

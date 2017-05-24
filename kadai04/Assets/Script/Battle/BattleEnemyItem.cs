@@ -13,7 +13,7 @@ public class BattleEnemyItem : MonoBehaviour {
     Image werknessElement;
 
     [SerializeField]
-    private Sprite[] elementIcon;//0:fire, 1:ice,2:thunder
+    private List<Sprite> elementIcon;//0:normal,1:critical,2:fire,3:ice,4:thunder
 
     const string ENEMY_HP = "{0} / {1}";
 
@@ -24,25 +24,7 @@ public class BattleEnemyItem : MonoBehaviour {
         enemyDamage = 0;
         enemyMaxHP = enemyData.enemyHP;
         enemyHP.text = string.Format(ENEMY_HP, enemyMaxHP - 0, enemyMaxHP);
-
-        switch (enemyData.Werkness)
-        {
-
-            case AttackType.fire:
-                werknessElement.sprite = elementIcon[0];
-                break;
-
-            case AttackType.ice:
-                werknessElement.sprite = elementIcon[1];
-                break;
-            case AttackType.thunder:
-                werknessElement.sprite = elementIcon[2];
-                break;
-            case AttackType.normal:
-                werknessElement.gameObject.SetActive(false);
-                break;
-
-        }
+        werknessElement.sprite = elementIcon[(int)enemyData.Werkness];   
 
         Defence.value = enemyData.enemyDefenceValue;
         MagicRes.value = enemyData.enemyMagicResValue;

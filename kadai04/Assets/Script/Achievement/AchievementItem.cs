@@ -9,7 +9,15 @@ public class AchievementItemData
     public AchievementKind kind;
     public string AchievementTitle;
     public Sprite AchievementTextImage;
-    public bool IsCrear=false;
+    public string AchievementText;
+    public bool IsCrear { get { return isCrear; } }
+    bool isCrear = false;
+
+    public void AchievementCrear()
+    {
+        isCrear = true;
+    }
+
 }
 
 public class AchievementItem : MonoBehaviour {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
 
 public class BattleManrger : MonoBehaviour
 {
@@ -33,6 +34,12 @@ public class BattleManrger : MonoBehaviour
     float speadRoulette = 0;
     public float MAX_SPEAD = 360f;
 
+    [SerializeField]
+    ScreenOverlay camera;
+
+    [SerializeField]
+    GameObject MessegeBoad;
+
 
     // Use this for initialization
 
@@ -48,9 +55,12 @@ public class BattleManrger : MonoBehaviour
     BattleState state = BattleState.none;
 
     [SerializeField]
-    Transform parent;
+    Transform Canvas3D, CanvasBattle;
     [SerializeField]
     GameObject[] effectPrefab;
+
+    [SerializeField]
+    BattleMessageBoad messageBoad;
 
 
     void Start()
@@ -59,15 +69,12 @@ public class BattleManrger : MonoBehaviour
         this.gameObject.SetActive(true);
         buttonStart.SetActive(true);
         buttonStop.SetActive(false);
-        message.gameObject.SetActive(false);
-        enemyDamage = 0;
+        messageBoad.gameObject.SetActive(false);
         enemy = EnemyManeger.Selected;
-        enemyArive = true;
-        playerArive = true;
         state = BattleState.none;
+        camera.intensity = 0;
         Init();
         Debug.Log(enemy.IsAlive);
-        StartCoroutine(AppearMesseage((MessageType)0));
 
     }
 
@@ -96,9 +103,10 @@ public class BattleManrger : MonoBehaviour
 
             message.sprite = messageSprites[1];
             message.gameObject.SetActive(true);
-
+            yield return new WaitForSeconds(2f);
+            messageBoad.Init(type, enemy.type);
             yield return new WaitForSeconds(3f);
-
+            while (AchievementManeger.IsPopup) yield return new WaitForSeconds(0.5f);
             SceneManager.LoadScene("SelectBattleGame");
 
 
@@ -110,9 +118,10 @@ public class BattleManrger : MonoBehaviour
             message.sprite = messageSprites[2];
             message.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(3f);
-
-            SceneManager.LoadScene("SelectBattleGame");
+            yield return new WaitForSeconds(2f);
+            while (AchievementManeger.IsPopup) yield return new WaitForSeconds(0.5f);
+            //SceneManager.LoadScene("SelectBattleGame");
+            messageBoad.Init(type,enemy.type, Init);
 
         }
         state = BattleState.idle;
@@ -121,11 +130,15 @@ public class BattleManrger : MonoBehaviour
 
     public void Init()
     {
-
+        message.gameObject.SetActive(false);
+        enemyDamage = 0;
+        enemyArive = true;
+        playerArive = true;
         body.material.color = enemy.enemyColor;
         Crown.gameObject.SetActive(enemy.enemyLV > 1);
         playerItem.Init();
         enemyItem.SetEnemyData(enemy);
+        StartCoroutine(AppearMesseage((MessageType)0));
 
     }
 
@@ -141,8 +154,7 @@ public class BattleManrger : MonoBehaviour
         if (state != BattleState.idle) return;
 
         state = BattleState.turn;
-        buttonStart.SetActive(false);
-        buttonStop.SetActive(true);
+        StartCoroutine(ChengeButton(BattleState.turn));
 
     }
     public void OnClickStop()
@@ -155,14 +167,16 @@ public class BattleManrger : MonoBehaviour
         }
 
         state = BattleState.stopping;
-        buttonStart.SetActive(true);
-        buttonStop.SetActive(false);
+        StartCoroutine(ChengeButton(BattleState.stopping));
+        AchievementManeger.Instance.AddAchievement(AchievementKind.firstBattle);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(AchievementManeger.Instance.CheckKinds() && !(AchievementManeger.IsPopup))
+            StartCoroutine(AchievementManeger.Instance.PopupAchievement(CanvasBattle));
 
         if (state == BattleState.turn || state == BattleState.stopping)
         {
@@ -211,32 +225,41 @@ public class BattleManrger : MonoBehaviour
                 {
                     damage = playerItem.ValueAttack * 2;
                     kind = AttackKind.attack;
+                    AchievementManeger.Instance.AddAchievement(AchievementKind.hitCritical);
                 }
                 else
                 {
-                    if (result == enemy.Werkness) damage = playerItem.ValueMagic * 2;
-                    else damage = playerItem.ValueMagic;
 
+                    damage = playerItem.ValueMagic;
                     kind = AttackKind.magic;
                 }
 
+                damage = CheckWerkness(damage, result);
                 AttackEffect(result);
                 enemyArive = enemyItem.UpdataEnemyHp(damage, kind);
+                Shake(result == enemy.Werkness);
                 playerItem.ReturnAttackAndMagicValue();
             }
         }
-        else playerArive = playerItem.MissAttack();
+        else {
+            playerArive = playerItem.MissAttack();
+            StartCoroutine(EffectDamage());
+            AchievementManeger.Instance.AddAchievement(AchievementKind.missAttack);
+        }
 
         Debug.LogFormat("Attack:{0}, damage:{1}", result.ToString(), damage);
         if (enemyArive == false)
         {
 
-            EnemyManeger.Instance.CrearEnemy(enemy.type);
+            EnemyManeger.Instance.CrearEnemy(enemy.type, CanvasBattle);
             selectIcon.ActionEnemyDead();
             StartCoroutine(AppearMesseage((MessageType)1));
 
         }
-        if (playerArive == false) StartCoroutine(AppearMesseage((MessageType)2));
+        if (playerArive == false) {
+            AchievementManeger.Instance.AddAchievement(AchievementKind.loseBattle);
+            StartCoroutine(AppearMesseage((MessageType)2));
+        }
     }
 
     AttackType TryAttack()
@@ -267,9 +290,58 @@ public class BattleManrger : MonoBehaviour
         }
         Vector3 pos = new Vector3(0, 0.02f, -0.05f);
         Quaternion rot = new Quaternion(0, 0, 0, 0);
-        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, parent);
+        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, Canvas3D);
         GameObject.Destroy(eff, 2.0f);
 
+    }
+
+    int CheckWerkness(int damage, AttackType type)
+    {
+
+        if (enemy.Werkness == type)
+        {
+            AchievementManeger.Instance.AddAchievement(AchievementKind.hitWeakness);
+            return damage * 2;
+        }
+        return damage;
+
+    }
+
+    IEnumerator EffectDamage()
+    {
+        camera.intensity = 1;
+        yield return new WaitForSeconds(0.5f);
+        camera.intensity = 0;
+    }
+
+    IEnumerator ChengeButton(BattleState state)
+    {
+        if (state == BattleState.turn)
+        {
+            //while (speadRoulette < MAX_SPEAD) yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
+            buttonStart.SetActive(false);
+            buttonStop.SetActive(true);
+        }
+        else if (state == BattleState.stopping)
+        {
+            //while (speadRoulette > 0) yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
+            buttonStop.SetActive(false);
+            buttonStart.SetActive(true);
+        }
+        else yield break;
+    }
+
+    void Shake(bool isWeakness)
+    {
+        float degree = isWeakness ? 0.06f : 0.02f;
+        iTween.ShakePosition(selectIcon.gameObject, iTween.Hash(
+            "x", degree,
+            "y", degree,
+            "islocal", true,
+            "time", 0.5f
+            ));
     }
 
 }

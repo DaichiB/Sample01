@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,19 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
     int enemyCrearCount = 0;
     public int StegeLv{get{ return stegeLv; } }
     int stegeLv = 1;
+
+    
+    public enum DebugStege
+    {
+        play,
+        Lv1,
+        Lv2,
+        Lv3
+    }
+
+    public DebugStege DebugStegeLv = DebugStege.Lv1;
+
+    const string CREAR_TEXT = "crear";
 
     
     public void Awake()
@@ -41,12 +55,14 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
 
     }
 
-    public void CrearEnemy(EnemyData.Type type)
+    public void CrearEnemy(EnemyData.Type type, Transform parent)
     {
 
         
         EnemyData enemy = FindData(type);
         enemy.EnemyDaed();
+        AchievementKind kind = (AchievementKind)Enum.Parse(typeof(AchievementKind), (CREAR_TEXT + type.ToString()));
+        AchievementManeger.Instance.AddAchievement(kind);
         
         enemyCrearCount++;
         if (stegeLv == 1 && enemyCrearCount >= 4)
@@ -55,6 +71,19 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
             stegeLv = 3;
 
 
+    }
+
+    public void StegeDebug()
+    {
+        if(DebugStegeLv != DebugStege.play)
+        {
+            stegeLv = (int)DebugStegeLv;
+            for(int i = 0; i < enemyDataList.Count; i++)
+            {
+                EnemyData enemy = enemyDataList[i];
+                if (enemy.enemyLV < stegeLv) enemy.EnemyDaed();
+            }
+        }
     }
 
 

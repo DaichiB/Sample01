@@ -14,10 +14,11 @@ public class StegeSelectManager : MonoBehaviour {
 	// Use this for initialization
 	public void Start () { //本来はopen
 
+        EnemyManeger.Instance.StegeDebug();
         this.gameObject.SetActive(true); //設定されているgameObjectを表示状態に
         InitIcons();
         boad.Close();
-		
+        
 	}
 
     void InitIcons()
