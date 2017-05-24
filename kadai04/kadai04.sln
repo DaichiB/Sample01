@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kadai04.Plugins", "kadai04.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kadai04", "kadai04.csproj", "{478496A8-B3C6-F28F-9AE6-44AB21C204A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kadai04.Editor.Plugins", "kadai04.Editor.Plugins.csproj", "{8978DA3F-B4B7-3558-F9DD-0F59C6ADF009}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{478496A8-B3C6-F28F-9AE6-44AB21C204A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{478496A8-B3C6-F28F-9AE6-44AB21C204A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{478496A8-B3C6-F28F-9AE6-44AB21C204A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8978DA3F-B4B7-3558-F9DD-0F59C6ADF009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8978DA3F-B4B7-3558-F9DD-0F59C6ADF009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8978DA3F-B4B7-3558-F9DD-0F59C6ADF009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8978DA3F-B4B7-3558-F9DD-0F59C6ADF009}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
