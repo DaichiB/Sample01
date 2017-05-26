@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class BattleEnemyItem : MonoBehaviour {
 
     [SerializeField]
-    Slider lifeGarge, Defence, MagicRes;
+    Slider lifeGarge, Defence, MagicRes,gargeDelayed;
     [SerializeField]
     Text enemyHP;
     [SerializeField]
@@ -17,7 +17,7 @@ public class BattleEnemyItem : MonoBehaviour {
 
     const string ENEMY_HP = "{0} / {1}";
 
-    int enemyDamage, enemyMaxHP;
+    int enemyDamage, enemyMaxHP, currentHP;
 
     public void SetEnemyData(EnemyData enemyData)
     {
@@ -30,6 +30,9 @@ public class BattleEnemyItem : MonoBehaviour {
         MagicRes.value = enemyData.enemyMagicResValue;
         lifeGarge.maxValue = enemyData.enemyHP;
         lifeGarge.value = enemyData.enemyHP;
+        gargeDelayed.maxValue = enemyData.enemyHP;
+        gargeDelayed.value = enemyData.enemyHP;
+        currentHP = (int)lifeGarge.value;
 
     }
 
@@ -50,10 +53,50 @@ public class BattleEnemyItem : MonoBehaviour {
             return false;
         }
 
-        enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
+        //enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
         lifeGarge.value = enemyMaxHP - enemyDamage;
+        StartCoroutine(ActionGaegeDelayed());
+        StartCoroutine(ActionTextGaegeDelayed());
         return true;
 
+    }
+
+    IEnumerator ActionGaegeDelayed()
+    {
+        yield return new WaitForSeconds(0.1f);
+        ValueTransition(gargeDelayed.value, lifeGarge.value, 0.8f, 0.2f, "OnSliderDelayedUpdate", iTween.EaseType.linear);
+    }
+
+    IEnumerator ActionTextGaegeDelayed()
+    {
+        yield return new WaitForSeconds(0.1f);
+        ValueTransition(gargeDelayed.value, lifeGarge.value, 1.0f, 0, "OnTextUpdate", iTween.EaseType.linear);
+    }
+
+
+
+    private void ValueTransition(float from, float to, float duration, float delay,
+        string update, iTween.EaseType easetype)
+    {
+        iTween.ValueTo(gameObject, iTween.Hash(
+            "from", from,
+            "to", to,
+            "time", duration,
+            "delay", delay,
+            "onupdate", update,
+            "easetype", easetype
+            ));
+    }
+
+    private void OnSliderDelayedUpdate(float value)
+    {
+        gargeDelayed.value = value;
+        
+    }
+
+    private void OnTextUpdate(int life)
+    {
+        enemyHP.text = string.Format("{0} / {1}", life, enemyMaxHP);
     }
 
 }
