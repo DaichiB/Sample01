@@ -19,7 +19,13 @@ public class BattleManrger : MonoBehaviour
     StegeSelectIcon selectIcon;
 
     [SerializeField]
-    GameObject ruletteTable, buttonStart, buttonStop;
+    GameObject ruletteTable;
+
+    [SerializeField]
+    GameObject button;
+    [SerializeField]
+    Text buttonText;
+    const string START_BUTTON = "START", STOP_BUTTON = "STOP";
 
     protected int enemyDamage;
     EnemyData enemy;
@@ -37,8 +43,8 @@ public class BattleManrger : MonoBehaviour
     [SerializeField]
     ScreenOverlay camera;
 
-    [SerializeField]
-    GameObject MessegeBoad;
+    //[SerializeField]
+    //GameObject MessegeBoad;
 
 
     // Use this for initialization
@@ -67,12 +73,14 @@ public class BattleManrger : MonoBehaviour
     {
 
         this.gameObject.SetActive(true);
-        buttonStart.SetActive(true);
-        buttonStop.SetActive(false);
+        buttonText.text = START_BUTTON;
         messageBoad.gameObject.SetActive(false);
         enemy = EnemyManeger.Selected;
         state = BattleState.none;
         camera.intensity = 0;
+        button.GetComponent<Animator>().SetBool("Normal", true);
+        button.GetComponent<Animator>().SetBool("Highlighted", false);
+        button.GetComponent<Animator>().SetBool("Pressed", false);
         Init();
         Debug.Log(enemy.IsAlive);
 
@@ -149,14 +157,23 @@ public class BattleManrger : MonoBehaviour
 
     }
 
+    public void OnClickButton()
+    {
+        if (state == BattleState.idle) OnClickStart();
+        else if (state == BattleState.turn) OnClickStop();
+    }
+
     public void OnClickStart()
     {
         if (state != BattleState.idle) return;
 
+        button.GetComponent<Animator>().SetBool("Highlighted", false);
+        button.GetComponent<Animator>().SetBool("Pressed", true);
         state = BattleState.turn;
         StartCoroutine(ChengeButton(BattleState.turn));
 
     }
+
     public void OnClickStop()
     {
 
@@ -166,10 +183,24 @@ public class BattleManrger : MonoBehaviour
             return;
         }
 
+        button.GetComponent<Animator>().SetBool("Highlighted", false);
+        button.GetComponent<Animator>().SetBool("Pressed", true);
         state = BattleState.stopping;
         StartCoroutine(ChengeButton(BattleState.stopping));
         AchievementManeger.Instance.AddAchievement(AchievementKind.firstBattle);
 
+    }
+
+    public void ButtonNormal()
+    {
+        button.GetComponent<Animator>().SetBool("Highlighted", false);
+        button.GetComponent<Animator>().SetBool("Normal", true);
+    }
+
+    public void ButtonHighLighted()
+    {
+        button.GetComponent<Animator>().SetBool("Normal", false);
+        button.GetComponent<Animator>().SetBool("Highlighted", true);
     }
 
     // Update is called once per frame
@@ -318,19 +349,20 @@ public class BattleManrger : MonoBehaviour
     {
         if (state == BattleState.turn)
         {
-            //while (speadRoulette < MAX_SPEAD) yield return new WaitForSeconds(0.3f);
             yield return new WaitForSeconds(0.5f);
-            buttonStart.SetActive(false);
-            buttonStop.SetActive(true);
+            button.GetComponent<Animator>().SetBool("Pressed", false);
+            button.GetComponent<Animator>().SetBool("Highlighted", true);
+            buttonText.text = STOP_BUTTON;
         }
         else if (state == BattleState.stopping)
         {
-            //while (speadRoulette > 0) yield return new WaitForSeconds(0.3f);
             yield return new WaitForSeconds(0.5f);
-            buttonStop.SetActive(false);
-            buttonStart.SetActive(true);
+            button.GetComponent<Animator>().SetBool("Pressed", false);
+            button.GetComponent<Animator>().SetBool("Highlighted", true);
+            buttonText.text = START_BUTTON;
         }
         else yield break;
+
     }
 
     void Shake(bool isWeakness)
