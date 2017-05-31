@@ -24,9 +24,11 @@ public class BattlePlayerItem : MonoBehaviour {
         playerDamage = 0;
         for(int i = 0; i < 3; i++)
             playerLife[i].sprite = LifeIcon[0];
-       
-        AttackGarge.value = attack;
-        MagicGarge.value = magic;
+
+        PlayerCharactorData playerData = PlayerCharactorManager.Instance.PlayerData;
+
+        AttackGarge.value = playerData.attackNum;
+        MagicGarge.value = playerData.magicNum;
 
     }
 

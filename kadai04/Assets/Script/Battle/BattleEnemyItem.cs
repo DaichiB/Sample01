@@ -8,7 +8,7 @@ public class BattleEnemyItem : MonoBehaviour {
     [SerializeField]
     Slider lifeGarge, Defence, MagicRes,gargeDelayed;
     [SerializeField]
-    Text enemyHP;
+    Text enemyHP, damageTxt;
     [SerializeField]
     Image werknessElement;
 
@@ -39,6 +39,7 @@ public class BattleEnemyItem : MonoBehaviour {
     public bool UpdataEnemyHp(int Damage, AttackKind kind)
     {
         int defence=0;
+        bool arive = true;
         if (kind == AttackKind.attack) defence = (int)Defence.value*10;
         else if (kind == AttackKind.magic) defence = (int)MagicRes.value*10;
 
@@ -50,15 +51,24 @@ public class BattleEnemyItem : MonoBehaviour {
             enemyDamage = enemyMaxHP;
             enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
             lifeGarge.value = enemyMaxHP - enemyDamage;
-            return false;
+            arive=false;
         }
 
         //enemyHP.text = string.Format(ENEMY_HP, (enemyMaxHP - enemyDamage), enemyMaxHP);
         lifeGarge.value = enemyMaxHP - enemyDamage;
+        StartCoroutine(DamageText(gargeDelayed.value - lifeGarge.value));
         StartCoroutine(ActionGaegeDelayed());
         StartCoroutine(ActionTextGaegeDelayed());
-        return true;
+        return arive;
 
+    }
+
+    IEnumerator DamageText(float damage)
+    {
+        damageTxt.text = "-" + (damage);
+        damageTxt.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
+        damageTxt.gameObject.SetActive(false);
     }
 
     IEnumerator ActionGaegeDelayed()

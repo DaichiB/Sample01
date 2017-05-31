@@ -10,6 +10,7 @@ public class StegeSelectManager : MonoBehaviour {
 
     public StegeSelectPlanet planet;
     public StegeSelectBoad boad;
+    public CharactorMaking charactorMaking;
 
 	// Use this for initialization
 	public void Start () { //本来はopen
@@ -18,6 +19,7 @@ public class StegeSelectManager : MonoBehaviour {
         this.gameObject.SetActive(true); //設定されているgameObjectを表示状態に
         InitIcons();
         boad.Close();
+        charactorMaking.Open();
         
 	}
 

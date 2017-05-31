@@ -46,3 +46,10 @@ public enum AchievementKind
     hitWeakness,
     complete
 }
+
+public enum PlayerCharactor
+{
+    Monster,
+    Merman,
+    Robot
+}

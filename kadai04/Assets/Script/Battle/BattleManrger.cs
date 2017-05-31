@@ -61,7 +61,7 @@ public class BattleManrger : MonoBehaviour
     BattleState state = BattleState.none;
 
     [SerializeField]
-    Transform Canvas3D, CanvasBattle;
+    Transform effectParent, CanvasBattle;
     [SerializeField]
     GameObject[] effectPrefab;
 
@@ -75,6 +75,7 @@ public class BattleManrger : MonoBehaviour
         this.gameObject.SetActive(true);
         buttonText.text = START_BUTTON;
         messageBoad.gameObject.SetActive(false);
+        message.gameObject.SetActive(false);
         enemy = EnemyManeger.Selected;
         state = BattleState.none;
         camera.intensity = 0;
@@ -90,16 +91,30 @@ public class BattleManrger : MonoBehaviour
     {
 
         state = BattleState.messeage;
+        Vector3 pos = new Vector3(0, -300, 0);
+        message.rectTransform.localPosition = pos;
+        
         if (type == MessageType.battleStart)
         {
             message.sprite = messageSprites[0];
 
             yield return new WaitForSeconds(0.2f);
-
             message.gameObject.SetActive(true);
+            float temp = (float)((-48.0 + 300.0));
+            while(message.rectTransform.localPosition.y<-48)
+            {
+                pos.y += temp*Time.deltaTime;
+                message.rectTransform.localPosition = pos;
+                yield return null;//１フレーム待って再開（※unityの１フレームは一定時間後に更新ではない）
+            }
 
             yield return new WaitForSeconds(2f);
-
+            iTween.MoveTo(message.gameObject, iTween.Hash(
+                "y", -300,
+                "time", 1f,
+                "islocal", true
+                ));
+            yield return new WaitForSeconds(1f);
             Debug.Log("Waited!");
 
             message.gameObject.SetActive(false);
@@ -111,10 +126,21 @@ public class BattleManrger : MonoBehaviour
 
             message.sprite = messageSprites[1];
             message.gameObject.SetActive(true);
-            yield return new WaitForSeconds(2f);
+            iTween.MoveTo(message.gameObject, iTween.Hash(
+                "y", -48,
+                "time", 1f,
+                "islocal", true
+                ));
+            yield return new WaitForSeconds(4f);
             messageBoad.Init(type, enemy.type);
             yield return new WaitForSeconds(3f);
             while (AchievementManeger.IsPopup) yield return new WaitForSeconds(0.5f);
+            iTween.MoveTo(message.gameObject, iTween.Hash(
+                "y", -300,
+                "time", 1f,
+                "islocal", true
+                ));
+            yield return new WaitForSeconds(2f);
             SceneManager.LoadScene("SelectBattleGame");
 
 
@@ -125,7 +151,11 @@ public class BattleManrger : MonoBehaviour
 
             message.sprite = messageSprites[2];
             message.gameObject.SetActive(true);
-
+            iTween.MoveTo(message.gameObject, iTween.Hash(
+                "y", -48,
+                "time", 1f,
+                "islocal", true
+                ));
             yield return new WaitForSeconds(2f);
             while (AchievementManeger.IsPopup) yield return new WaitForSeconds(0.5f);
             //SceneManager.LoadScene("SelectBattleGame");
@@ -138,7 +168,7 @@ public class BattleManrger : MonoBehaviour
 
     public void Init()
     {
-        message.gameObject.SetActive(false);
+        //message.gameObject.SetActive(false);
         enemyDamage = 0;
         enemyArive = true;
         playerArive = true;
@@ -321,7 +351,7 @@ public class BattleManrger : MonoBehaviour
         }
         Vector3 pos = new Vector3(0, 0.02f, -0.05f);
         Quaternion rot = new Quaternion(0, 0, 0, 0);
-        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, Canvas3D);
+        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, effectParent);
         GameObject.Destroy(eff, 2.0f);
 
     }

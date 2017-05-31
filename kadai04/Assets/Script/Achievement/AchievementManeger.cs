@@ -43,7 +43,7 @@ public class AchievementManeger : SingletonMonoBehaviour<AchievementManeger> {
                 data.AchievementCrear();
                 PopupAchievement pop = GameObject.Instantiate(prefab, parent).GetComponent<PopupAchievement>();
                 pop.Init(data);
-                yield return new WaitForSeconds(3);
+                yield return new WaitForSeconds(4.5f);
                 Destroy(pop.gameObject);
                 CheckComplete();
             }
