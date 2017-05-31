@@ -12,11 +12,12 @@ public class CharactorMaking : MonoBehaviour
     List<Toggle> toggles;
     [SerializeField]
     Slider sliderPlayerScale;
+    [SerializeField]
+    List<Text> ability;
 
     PlayerCharactor selected;
     float playerScale;
-    [SerializeField]
-    Transform content;
+    
 
     public void Open()
     {
@@ -40,6 +41,9 @@ public class CharactorMaking : MonoBehaviour
         PlayerCharactorData data = PlayerCharactorManager.Instance.SelectData(chara);
 
         charactor.sprite = data.pictCharactor;
+        ability[0].text = data.attackNum.ToString();
+        ability[1].text = data.magicNum.ToString();
+
 
         selected = chara;
     }
@@ -59,7 +63,7 @@ public class CharactorMaking : MonoBehaviour
     void UpdateScale()
     {
         Vector3 newScale = Vector3.one * (playerScale * 0.5f + 0.5f);
-        content.localScale = newScale;
+        charactor.transform.localScale = newScale;
     }
 
 }

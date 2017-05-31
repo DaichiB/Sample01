@@ -12,10 +12,13 @@ public class BattlePlayerItem : MonoBehaviour {
     Sprite[] LifeIcon;
     [SerializeField]
     Slider AttackGarge, MagicGarge;
+    [SerializeField]
+    Image playerChara;
 
     public int ValueAttack { get { return (int)AttackGarge.value *10; } }
     public int ValueMagic { get { return (int)MagicGarge.value *10; } }
 
+    PlayerCharactorData playerData;
     public int attack = 4, magic = 5;
 
     public void Init()
@@ -25,10 +28,11 @@ public class BattlePlayerItem : MonoBehaviour {
         for(int i = 0; i < 3; i++)
             playerLife[i].sprite = LifeIcon[0];
 
-        PlayerCharactorData playerData = PlayerCharactorManager.Instance.PlayerData;
+        playerData = PlayerCharactorManager.Instance.PlayerData;
 
         AttackGarge.value = playerData.attackNum;
         MagicGarge.value = playerData.magicNum;
+        playerChara.sprite = playerData.pictCharactor;
 
     }
 
