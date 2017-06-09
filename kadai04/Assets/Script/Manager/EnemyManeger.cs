@@ -60,7 +60,7 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
 
         
         EnemyData enemy = FindData(type);
-        enemy.EnemyDaed();
+        enemy.EnemyDaedOrArrive();
         AchievementKind kind = (AchievementKind)Enum.Parse(typeof(AchievementKind), (CREAR_TEXT + type.ToString()));
         AchievementManeger.Instance.AddAchievement(kind);
         
@@ -81,7 +81,7 @@ public class EnemyManeger : SingletonMonoBehaviour<EnemyManeger> {
             for(int i = 0; i < enemyDataList.Count; i++)
             {
                 EnemyData enemy = enemyDataList[i];
-                if (enemy.enemyLV < stegeLv) enemy.EnemyDaed();
+                if (enemy.enemyLV < stegeLv) enemy.EnemyDaedOrArrive();
             }
         }
     }

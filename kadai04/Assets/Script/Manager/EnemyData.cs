@@ -36,9 +36,9 @@ public class EnemyData {
     }
     bool isAlive = true;
 
-    public void EnemyDaed()
+    public void EnemyDaedOrArrive(bool type=false)
     {
-        isAlive = false;
+        isAlive = type;
     }
 
 }

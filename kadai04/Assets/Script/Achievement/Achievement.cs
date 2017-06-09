@@ -11,7 +11,7 @@ public class Achievement : MonoBehaviour {
     [SerializeField]
     GameObject prefab;
 
-    public int AchievementCount=15;
+    public int AchievementCount=AchievementManeger.Instance.datas.Count;
 
 	// Use this for initialization
 	void Start () {

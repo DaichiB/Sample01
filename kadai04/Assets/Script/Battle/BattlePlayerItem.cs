@@ -56,8 +56,8 @@ public class BattlePlayerItem : MonoBehaviour {
 
     public void ReturnAttackAndMagicValue()
     {
-        AttackGarge.value = attack;
-        MagicGarge.value = magic;
+        AttackGarge.value = playerData.attackNum;
+        MagicGarge.value = playerData.magicNum;
     }
 
 }

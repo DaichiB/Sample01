@@ -84,14 +84,13 @@ public class BattleManrger : MonoBehaviour
         button.GetComponent<Animator>().SetBool("Pressed", false);
         Init();
         Debug.Log(enemy.IsAlive);
-
     }
 
     IEnumerator AppearMesseage(MessageType type)
     {
 
         state = BattleState.messeage;
-        Vector3 pos = new Vector3(0, -300, 0);
+        Vector3 pos = new Vector3(0, -350, 0);
         message.rectTransform.localPosition = pos;
         
         if (type == MessageType.battleStart)
@@ -100,7 +99,7 @@ public class BattleManrger : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
             message.gameObject.SetActive(true);
-            float temp = (float)((-48.0 + 300.0));
+            float temp = (float)((-48.0 + 350.0));
             while(message.rectTransform.localPosition.y<-48)
             {
                 pos.y += temp*Time.deltaTime;
@@ -110,7 +109,7 @@ public class BattleManrger : MonoBehaviour
 
             yield return new WaitForSeconds(2f);
             iTween.MoveTo(message.gameObject, iTween.Hash(
-                "y", -300,
+                "y", -350,
                 "time", 1f,
                 "islocal", true
                 ));
@@ -136,7 +135,7 @@ public class BattleManrger : MonoBehaviour
             yield return new WaitForSeconds(3f);
             while (AchievementManeger.IsPopup) yield return new WaitForSeconds(0.5f);
             iTween.MoveTo(message.gameObject, iTween.Hash(
-                "y", -300,
+                "y", -350,
                 "time", 1f,
                 "islocal", true
                 ));
@@ -182,7 +181,7 @@ public class BattleManrger : MonoBehaviour
 
     public void OnClickReturn()
     {
-
+        if(state == BattleState.idle)
         SceneManager.LoadScene("SelectBattleGame");
 
     }
@@ -207,7 +206,7 @@ public class BattleManrger : MonoBehaviour
     public void OnClickStop()
     {
 
-        if (state != BattleState.turn)
+        if (state != BattleState.turn || speadRoulette<300)
         {
             Debug.LogError("Error:Click Stop when state is not turn!");
             return;
@@ -349,9 +348,12 @@ public class BattleManrger : MonoBehaviour
             Debug.LogError( "Error Attack Type");
             return;
         }
-        Vector3 pos = new Vector3(0, 0.02f, -0.05f);
+        Vector3 pos = new Vector3(0, 0, 0);
         Quaternion rot = new Quaternion(0, 0, 0, 0);
-        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type], pos, rot, effectParent);
+        GameObject eff = (GameObject)Instantiate(effectPrefab[(int)type]);
+        eff.transform.parent = effectParent;
+        eff.transform.localPosition = new Vector3(0, 0, 0);
+        eff.transform.localScale = new Vector3(10, 10, 10);
         GameObject.Destroy(eff, 2.0f);
 
     }
@@ -377,21 +379,17 @@ public class BattleManrger : MonoBehaviour
 
     IEnumerator ChengeButton(BattleState state)
     {
+
+        yield return new WaitForSeconds(0.5f);
         if (state == BattleState.turn)
-        {
-            yield return new WaitForSeconds(0.5f);
-            button.GetComponent<Animator>().SetBool("Pressed", false);
-            button.GetComponent<Animator>().SetBool("Highlighted", true);
             buttonText.text = STOP_BUTTON;
-        }
         else if (state == BattleState.stopping)
-        {
-            yield return new WaitForSeconds(0.5f);
-            button.GetComponent<Animator>().SetBool("Pressed", false);
-            button.GetComponent<Animator>().SetBool("Highlighted", true);
             buttonText.text = START_BUTTON;
-        }
-        else yield break;
+
+        button.GetComponent<Animator>().SetBool("Pressed", false);
+        button.GetComponent<Animator>().SetBool("Highlighted", true);
+        button.GetComponent<Animator>().SetBool("Normal", true);
+
 
     }
 
